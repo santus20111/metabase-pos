@@ -47,7 +47,7 @@ const DateAllOptionsWidget = ({
         filter={filter as any}
         onFilterChange={setFilter}
         onCommit={commitAndClose}
-        hideTimeSelectors
+        hideTimeSelectors={false}
         hideEmptinessOperators
         disableOperatorSelection={disableOperatorSelection}
         supportsExpressions

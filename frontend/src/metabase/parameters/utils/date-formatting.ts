@@ -4,14 +4,16 @@ import moment from "moment-timezone";
 
 import { DATE_OPERATORS } from "metabase/query_builder/components/filters/pickers/DatePicker/DatePicker";
 import { EXCLUDE_OPERATORS } from "metabase/query_builder/components/filters/pickers/DatePicker/ExcludeDatePicker";
-import { dateParameterValueToMBQL } from "metabase-lib/parameters/utils/mbql";
 import { DATE_MBQL_FILTER_MAPPING } from "metabase-lib/parameters/constants";
+import { dateParameterValueToMBQL } from "metabase-lib/parameters/utils/mbql";
+
 import {
   generateTimeFilterValuesDescriptions,
   getRelativeDatetimeInterval,
   getStartingFrom,
 } from "metabase-lib/queries/utils/query-time";
 
+import MetabaseSettings from "metabase/lib/settings";
 import { UiParameter } from "metabase-lib/parameters/types";
 
 // Use a placeholder value as field references are not used in dashboard filters
@@ -133,7 +135,19 @@ export function formatRangeWidget(value: string) {
 }
 
 export function formatSingleWidget(value: string) {
-  return value ? moment(value).format("MMMM D, YYYY") : "";
+  if(!value) {
+    return "";
+  }
+  const isWithTime = value.length > 10;
+  const customFormatting = MetabaseSettings.get("custom-formatting") || {};
+  const temporalStyle = customFormatting['type/Temporal'];
+
+  const dateSeparator = temporalStyle.date_separator;
+  const dateFormat = temporalStyle.date_style.replace(/\//g, dateSeparator);
+  const timeFormat = temporalStyle.time_style;
+
+  const format = `${dateFormat}${isWithTime ? ' ' + timeFormat : ''}`
+  return moment(value).format(format);
 }
 
 export function formatMonthYearWidget(value: string) {

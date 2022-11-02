@@ -590,6 +590,69 @@ export function pivot(data, normalCol, pivotCol, cellCol) {
   };
 }
 
+/*// This is the reverse function used in the normal table visualization.
+export function reverse(data) {
+  const { pivotValues, normalValues } = distinctValuesSorted(
+    data.rows,
+    pivotCol,
+    normalCol,
+  );
+
+  // make sure that the first element in the pivoted column list is null which makes room for the label of the other column
+  pivotValues.unshift(data.cols[normalCol].display_name);
+
+  // start with an empty grid that we'll fill with the appropriate values
+  const pivotedRows = normalValues.map((normalValues, index) => {
+    const row = pivotValues.map(() => null);
+    // for onVisualizationClick:
+    row._dimension = {
+      value: normalValues,
+      column: data.cols[normalCol],
+    };
+    return row;
+  });
+
+  // keep a record of which row the data came from for onVisualizationClick
+  const sourceRows = normalValues.map(() => pivotValues.map(() => null));
+
+  // fill it up with the data
+  for (let j = 0; j < data.rows.length; j++) {
+    const normalColIdx = normalValues.lastIndexOf(data.rows[j][normalCol]);
+    const pivotColIdx = pivotValues.lastIndexOf(data.rows[j][pivotCol]);
+
+    pivotedRows[normalColIdx][0] = data.rows[j][normalCol];
+    pivotedRows[normalColIdx][pivotColIdx] = data.rows[j][cellCol];
+    sourceRows[normalColIdx][pivotColIdx] = j;
+  }
+
+  // provide some column metadata to maintain consistency
+  const cols = pivotValues.map(function (value, idx) {
+    if (idx === 0) {
+      // first column is always the coldef of the normal column
+      return data.cols[normalCol];
+    } else {
+      return {
+        ...data.cols[cellCol],
+        // `name` must be the same for conditional formatting, but put the
+        // formatted pivotted value in the `display_name`
+        display_name: formatValue(value, { column: data.cols[pivotCol] }) || "",
+        // for onVisualizationClick:
+        _dimension: {
+          value: value,
+          column: data.cols[pivotCol],
+        },
+      };
+    }
+  });
+
+  return {
+    cols: cols,
+    columns: pivotValues,
+    rows: pivotedRows,
+    sourceRows,
+  };
+}*/
+
 function distinctValuesSorted(rows, pivotColIdx, normalColIdx) {
   const normalSet = new Set();
   const pivotSet = new Set();

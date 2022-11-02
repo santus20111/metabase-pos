@@ -135,6 +135,12 @@ export default class PieChart extends Component {
       widget: "toggle",
       default: false,
     },
+    "pie.show_total_value": {
+      section: t`Display`,
+      title: 'Show total value', // TODO i18n
+      widget: "toggle",
+      default: true,
+    },
     "pie.slice_threshold": {
       section: t`Display`,
       title: t`Minimum slice percentage`,
@@ -507,7 +513,7 @@ export default class PieChart extends Component {
         isDashboard={this.props.isDashboard}
       >
         <div className={styles.ChartAndDetail}>
-          <div ref={this.chartDetail} className={styles.Detail}>
+          { settings["pie.show_total_value"] && <div ref={this.chartDetail} className={styles.Detail}>
             <div
               data-testid="detail-value"
               className={cx(
@@ -518,7 +524,7 @@ export default class PieChart extends Component {
               {value}
             </div>
             <div className={styles.Title}>{title}</div>
-          </div>
+          </div> }
           <div
             ref={this.chartContainer}
             className={cx(styles.Chart, "layout-centered")}

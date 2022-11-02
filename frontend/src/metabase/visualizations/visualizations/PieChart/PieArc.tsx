@@ -37,8 +37,7 @@ export const PieArc = ({
       return;
     }
 
-    const isLabelVisible =
-      dimensions.width + LABEL_PADDING <= maxDimension &&
+    const isLabelVisible = dimensions.width + LABEL_PADDING <= maxDimension &&
       dimensions.height + LABEL_PADDING <= maxDimension;
 
     setIsLabelVisible(isLabelVisible);

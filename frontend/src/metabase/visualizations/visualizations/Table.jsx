@@ -95,6 +95,14 @@ export default class Table extends Component {
         data.cols.filter(isMetric).length === 1 &&
         data.cols.filter(isDimension).length === 2,
     },
+    "table.reverse": {
+      section: t`Columns`,
+      title: 'Reverse table',
+      widget: "toggle",
+      inline: true,
+      getHidden: () => false,
+      getDefault: () => false,
+    },
     "table.pivot_column": {
       section: t`Columns`,
       title: t`Pivot column`,
@@ -386,6 +394,31 @@ export default class Table extends Component {
           cellIndex,
           settings,
         ),
+      });
+    } else if(settings['table.reverse']) {
+      const { cols, rows } = data;
+
+      const reversedCols = ['column', ...rows].map(row => ({
+        base_type: 'type/Text',
+        display_name: row[0],
+        effective_type: 'type/Text',
+        name: row[0],
+        source: "native",
+        field_ref: cols[0].field_ref
+      }));
+
+      const reversedRows = cols.map((col, colIndex) => {
+        return [
+          settings.column(col).column_title,
+          ...rows.map(row => row[colIndex]?.toString())
+        ]
+      })
+
+      this.setState({
+        data: {
+          cols: reversedCols,
+          rows: reversedRows,
+        },
       });
     } else {
       const { cols, rows } = data;

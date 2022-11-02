@@ -100,8 +100,8 @@ export function formatFrame(frame: "first" | "last" | "mid") {
 }
 
 export function getDateStyleFromSettings() {
-  const customFormattingSettings = MetabaseSettings.get("custom-formatting");
-  return customFormattingSettings?.["type/Temporal"]?.date_style;
+  const temporalSettings = MetabaseSettings.get("custom-formatting")?.["type/Temporal"];
+  return temporalSettings?.date_style?.replace(/\//g, temporalSettings?.date_separator);
 }
 
 export function getDefaultTimezone() {
